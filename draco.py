@@ -8,7 +8,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 # Read in the list of proxies from a text file
-with open('proxy.txt') as f:
+with open("proxy.txt", "r") as f:
     proxies = f.read().splitlines()
 
 # Set the custom user agent to use
