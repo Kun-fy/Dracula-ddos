@@ -3,9 +3,8 @@ from scapy.all import *
 import sys
 import threading
 import time
-#NTP Amp DOS attack
-#usage ntpdos.py <target ip> <ntpserver list> <number of threads> ex: ntpdos.py 1.2.3.4 file.txt 10
-#FOR USE ON YOUR OWN NETWORK ONLY
+#usage drako dos.py <target ip> <ntpserver list> <number of threads> ex: ntpdos.py 1.2.3.4 file.txt 10
+#
 
 
 #packet sender
