@@ -89,7 +89,7 @@ def handleStatusCodes(status_code):
 	global request_counter
 	sys.stdout.write(f"\r[ %i ] >" % request_counter)
 	print(f"\r\033[38;5;220m Request | \033[37m" +str(status_code)+ " \033[38;5;220m|")
-	print ("\n" +msg+ " after %i requests" % request_counter) "")
+	print ("\n" +msg+ " after %i requests" % request_counter)
 	print(f"\r\033[32mpayload \033[33m" +str(payload)+ "\033[0m")
 	sys.stdout.flush()
 	if status_code == 429:
