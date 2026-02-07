@@ -87,8 +87,8 @@ def initHeaders():
 
 def handleStatusCodes(status_code):
 	global request_counter
-	sys.stdout.write(f"\r[ %i ] > \033[32mRequest" % request_counter)
-	print(f"\033[31mstatus code \033[38;5;220m |" +(status_code)+ " | \033[37m" +str(payload)+ "")
+	sys.stdout.write(f"\r[ %i ] > \033[38;5;111mmRequest" % request_counter)
+	print(f"\033[31m Status code \033[38;5;220m| " +(status_code)+ " | \033[32m" +str(payload)+ "")
 	print("\n" +msg+ " after %i requests" % request_counter)
 	sys.stdout.flush()
 	if status_code == 429:
