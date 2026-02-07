@@ -90,7 +90,7 @@ def handleStatusCodes(status_code):
 	sys.stdout.write(f"\r[ %i ] >" % request_counter)
 	print(f"\r\033[38;5;220m Request | \033[37m" +url+ " \033[38;5;220m| \033[32m" +str(payload)+ "\033[0m")
 	sys.stdout.write(f"\r[ %i ] >" % request_counter)
-	print(f"\r\033[32m Request \033[37m |\033[91m" +url+ " \033[37m| \033[38;5;220m" +str(append)+ "")
+	print(f"\r\033[32m Request \033[37m |\033[91m" +url+ " \033[37m| \033[38;5;220m" +str(counter)+ "")
 	sys.stdout.flush()
 	if status_code == 429:
 			printMsg("You have been throttled")
